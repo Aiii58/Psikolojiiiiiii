@@ -1,0 +1,2225 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psikoloji Öğrenme</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Dark Theme */
+        :root, [data-theme="dark"] {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --bg-card-hover: #222230;
+            --accent: #7c5cff;
+            --accent-glow: rgba(124, 92, 255, 0.3);
+            --accent-soft: rgba(124, 92, 255, 0.1);
+            --text-primary: #f0f0f5;
+            --text-secondary: #8888a0;
+            --text-muted: #555566;
+            --border: rgba(255, 255, 255, 0.08);
+            --success: #4ecdc4;
+            --warning: #ffd166;
+            --danger: #ff6b6b;
+            --info: #74c0fc;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-primary: #f5f5f8;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f0f0f5;
+            --accent: #6b4ce6;
+            --accent-glow: rgba(107, 76, 230, 0.25);
+            --accent-soft: rgba(107, 76, 230, 0.1);
+            --text-primary: #1a1a2e;
+            --text-secondary: #666680;
+            --text-muted: #999999;
+            --border: rgba(0, 0, 0, 0.08);
+            --success: #2db3a8;
+            --warning: #e6a800;
+            --danger: #e55050;
+            --info: #4a9fd4;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-card-hover);
+            transform: scale(1.05);
+        }
+
+        .theme-toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover .theme-toggle-icon {
+            transform: rotate(20deg);
+        }
+
+        .theme-toggle-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        /* Ambient Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+            transition: opacity 0.4s ease;
+        }
+
+        [data-theme="light"] .ambient-orb {
+            opacity: 0.2;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #4ecdc4 0%, transparent 70%);
+            bottom: -50px;
+            left: -50px;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #ffd166 0%, transparent 70%);
+            top: 50%;
+            left: 30%;
+            animation-delay: -14s;
+            opacity: 0.2;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(-30px, -20px) scale(1.02); }
+        }
+
+        /* Main Container */
+        .app-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 30px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent), #a78bfa);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 10px 40px var(--accent-glow);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        /* Search and Actions Bar */
+        .actions-bar {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 18px 25px 18px 55px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-soft);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .btn-create {
+            padding: 18px 35px;
+            background: linear-gradient(135deg, var(--accent), #9d7cff);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px var(--accent-glow);
+        }
+
+        .btn-create:active {
+            transform: translateY(0);
+        }
+
+        /* Stats and Backup Bar */
+        .stats-backup-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .backup-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-backup {
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-backup:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .btn-backup.export {
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .btn-backup.export:hover {
+            background: rgba(78, 205, 196, 0.1);
+        }
+
+        .btn-backup.import {
+            border-color: var(--info);
+            color: var(--info);
+        }
+
+        .btn-backup.import:hover {
+            background: rgba(116, 192, 252, 0.1);
+        }
+
+        #importFile {
+            display: none;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.purple { background: var(--accent-soft); }
+        .stat-icon.green { background: rgba(78, 205, 196, 0.15); }
+        .stat-icon.yellow { background: rgba(255, 209, 102, 0.15); }
+
+        .stat-info h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .stat-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Sections Grid */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--success));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            background: var(--bg-card-hover);
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px var(--shadow);
+        }
+
+        .section-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Clickable Info Boxes */
+        .section-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .info-box {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-box:hover {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            transform: scale(1.02);
+        }
+
+        .info-box .box-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .info-box.name .box-icon { background: var(--accent-soft); }
+        .info-box.description .box-icon { background: rgba(255, 159, 67, 0.15); }
+        .info-box.diagnosis .box-icon { background: rgba(78, 205, 196, 0.15); }
+        .info-box.types .box-icon { background: rgba(255, 209, 102, 0.15); }
+        .info-box.treatment .box-icon { background: rgba(116, 192, 252, 0.15); }
+        .info-box.story .box-icon { background: rgba(255, 107, 107, 0.15); }
+        .info-box.exam .box-icon { background: rgba(168, 85, 247, 0.15); }
+
+        .info-box .box-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .info-box .box-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .info-box .box-text {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .info-box.story, .info-box.exam {
+            grid-column: span 1;
+        }
+
+        .info-box.empty .box-text {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Section Card - Clickable for Preview */
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--success));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            background: var(--bg-card-hover);
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px var(--shadow);
+        }
+
+        .section-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .section-card-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .section-icon-large {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: var(--accent-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .section-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .section-info .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .section-info .section-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .section-info .section-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .progress-indicator {
+            display: flex;
+            gap: 4px;
+            margin-top: 12px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.filled {
+            background: var(--accent);
+        }
+
+        .progress-dot.filled.description { background: #ff9f43; }
+        .progress-dot.filled.diagnosis { background: var(--success); }
+        .progress-dot.filled.types { background: var(--warning); }
+        .progress-dot.filled.treatment { background: var(--info); }
+        .progress-dot.filled.story { background: var(--danger); }
+        .progress-dot.filled.exam { background: #a855f7; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .section-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Preview Modal */
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 25px 35px;
+        }
+
+        .preview-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .preview-box:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .preview-box-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .preview-box-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .preview-box.name .preview-box-icon { background: var(--accent-soft); }
+        .preview-box.description .preview-box-icon { background: rgba(255, 159, 67, 0.15); }
+        .preview-box.diagnosis .preview-box-icon { background: rgba(78, 205, 196, 0.15); }
+        .preview-box.types .preview-box-icon { background: rgba(255, 209, 102, 0.15); }
+        .preview-box.treatment .preview-box-icon { background: rgba(116, 192, 252, 0.15); }
+        .preview-box.story .preview-box-icon { background: rgba(255, 107, 107, 0.15); }
+        .preview-box.exam .preview-box-icon { background: rgba(168, 85, 247, 0.15); }
+
+        .preview-box-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .preview-box-content {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .preview-box.empty .preview-box-content {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .preview-box.exam .preview-box-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exam-count {
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .section-actions {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .section-card:hover .section-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: none;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+        }
+
+        .action-btn.delete:hover {
+            color: var(--danger);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .empty-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--bg-card);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 3rem;
+        }
+
+        .empty-state h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(30px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid var(--border);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            padding: 30px 35px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        .btn-close {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: none;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-close:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 30px 35px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .form-label .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .form-label .icon.purple { background: var(--accent-soft); }
+        .form-label .icon.green { background: rgba(78, 205, 196, 0.15); }
+        .form-label .icon.yellow { background: rgba(255, 209, 102, 0.15); }
+        .form-label .icon.blue { background: rgba(116, 192, 252, 0.15); }
+        .form-label .icon.pink { background: rgba(255, 107, 107, 0.15); }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-soft);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        textarea.form-input {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        /* Exam Questions Form */
+        .exam-questions-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .exam-question-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .exam-question-item-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .exam-question-item-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .exam-question-item label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .exam-question-item input,
+        .exam-question-item textarea {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .exam-question-item input:last-child,
+        .exam-question-item textarea:last-child {
+            margin-bottom: 0;
+        }
+
+        .exam-question-item input:focus,
+        .exam-question-item textarea:focus {
+            outline: none;
+            border-color: #a855f7;
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+        }
+
+        .exam-question-item textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .modal-footer {
+            padding: 20px 35px 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #9d7cff);
+            border: none;
+            color: white;
+            box-shadow: 0 6px 25px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 35px var(--accent-glow);
+        }
+
+        /* View Modal */
+        .view-content {
+            padding: 30px 35px;
+        }
+
+        .content-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .content-section.diagnosis { border-left-color: var(--success); }
+        .content-section.types { border-left-color: var(--warning); }
+        .content-section.treatment { border-left-color: var(--info); }
+        .content-section.story { border-left-color: var(--danger); }
+
+        .content-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .content-section h3 .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-section p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 20px 15px;
+                padding-top: 70px;
+            }
+
+            .theme-toggle {
+                top: 15px;
+                right: 15px;
+                padding: 6px 12px;
+            }
+
+            .theme-toggle-text {
+                display: none;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .actions-bar {
+                flex-direction: column;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .btn-create {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-backup-container {
+                flex-direction: column;
+            }
+
+            .stats-bar {
+                width: 100%;
+            }
+
+            .stat-card {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .backup-bar {
+                width: 100%;
+            }
+
+            .btn-backup {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-box.story {
+                grid-column: span 1;
+            }
+
+            .modal {
+                max-height: 95vh;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .modal-header,
+            .modal-body,
+            .modal-footer,
+            .view-content {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+        }
+
+        /* Detail Modal */
+        .detail-modal .modal {
+            max-width: 600px;
+        }
+
+        .detail-content {
+            padding: 30px 35px;
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-header .detail-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .detail-header .detail-icon.name { background: var(--accent-soft); }
+        .detail-header .detail-icon.description { background: rgba(255, 159, 67, 0.15); }
+        .detail-header .detail-icon.diagnosis { background: rgba(78, 205, 196, 0.15); }
+        .detail-header .detail-icon.types { background: rgba(255, 209, 102, 0.15); }
+        .detail-header .detail-icon.treatment { background: rgba(116, 192, 252, 0.15); }
+        .detail-header .detail-icon.story { background: rgba(255, 107, 107, 0.15); }
+        .detail-header .detail-icon.exam { background: rgba(168, 85, 247, 0.15); }
+
+        .detail-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+        }
+
+        .detail-header p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .detail-body {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 25px;
+            line-height: 1.8;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .detail-body.empty {
+            color: var(--text-muted);
+            font-style: italic;
+            text-align: center;
+            padding: 40px 25px;
+        }
+
+        .detail-nav {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .detail-nav button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .detail-nav button:hover:not(:disabled) {
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .detail-nav button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Exam Styles */
+        .exam-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .exam-question {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 15px 18px;
+            margin-bottom: 12px;
+        }
+
+        .exam-question:last-child {
+            margin-bottom: 0;
+        }
+
+        .exam-question-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .exam-question-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .exam-question-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .exam-question-text {
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .exam-answer {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding-left: 38px;
+            border-left: 2px solid rgba(168, 85, 247, 0.3);
+            margin-left: 14px;
+        }
+
+        .exam-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .exam-empty-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 40px var(--shadow);
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.success {
+            border-color: var(--success);
+        }
+
+        .toast.error {
+            border-color: var(--danger);
+        }
+
+        .toast-icon {
+            font-size: 1.3rem;
+        }
+
+        .toast-message {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-card-hover);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-toggle-icon" id="themeIcon">🌙</span>
+        <span class="theme-toggle-text" id="themeText">Gece Modu</span>
+    </button>
+
+    <div class="ambient-bg">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">🧠</div>
+                <div>
+                    <h1>Psikoloji Öğrenme</h1>
+                    <p class="subtitle">Psikolojik rahatsızlıkları keşfet ve öğren</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="actions-bar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Bölüm ara... (örn: Depresyon, Anksiyete)">
+            </div>
+            <button class="btn-create" onclick="openCreateModal()">
+                <span>➕</span>
+                Yeni Bölüm Oluştur
+            </button>
+        </div>
+
+        <div class="stats-backup-container">
+            <div class="stats-bar">
+                <div class="stat-card">
+                    <div class="stat-icon purple">📚</div>
+                    <div class="stat-info">
+                        <h3 id="totalSections">0</h3>
+                        <p>Toplam Bölüm</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">✅</div>
+                    <div class="stat-info">
+                        <h3 id="completedSections">0</h3>
+                        <p>Tamamlanan</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow">📝</div>
+                    <div class="stat-info">
+                        <h3 id="inProgressSections">0</h3>
+                        <p>Devam Eden</p>
+                    </div>
+                </div>
+            </div>
+            <div class="backup-bar">
+                <button class="btn-backup export" onclick="exportBackup()">
+                    <span>💾</span>
+                    Yedek Al
+                </button>
+                <button class="btn-backup import" onclick="document.getElementById('importFile').click()">
+                    <span>📂</span>
+                    Yedek Yükle
+                </button>
+                <input type="file" id="importFile" accept=".json" onchange="importBackup(event)">
+            </div>
+        </div>
+
+        <div class="sections-grid" id="sectionsGrid">
+            <!-- Sections will be rendered here -->
+        </div>
+
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">📖</div>
+            <h2>Henüz bölüm yok</h2>
+            <p>Psikoloji öğrenme yolculuğuna başlamak için ilk bölümünüzü oluşturun.</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-icon" id="toastIcon">✅</span>
+        <span class="toast-message" id="toastMessage">İşlem başarılı!</span>
+    </div>
+
+    <!-- Create/Edit Modal -->
+    <div class="modal-overlay" id="createModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Yeni Bölüm Oluştur</h2>
+                <button class="btn-close" onclick="closeCreateModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="icon purple">🏷️</span>
+                        Rahatsızlık Adı
+                    </label>
+                    <input type="text" class="form-input" id="inputName" placeholder="Örn: Major Depresif Bozukluk">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="icon" style="background: rgba(255, 159, 67, 0.15);">❓</span>
+                        Rahatsızlık Ne?
+                    </label>
+                    <textarea class="form-input" id="inputDescription" placeholder="Bu rahatsızlık nedir? Kısa bir tanım ve açıklama yazın."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="icon green">🔬</span>
+                        Tanı Kriterleri
+                    </label>
+                    <textarea class="form-input" id="inputDiagnosis" placeholder="Bu rahatsızlık nasıl teşhis edilir? Belirtileri nelerdir?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="icon yellow">📊</span>
+                        Çeşitleri / Alt Türleri
+                    </label>
+                    <textarea class="form-input" id="inputTypes" placeholder="Bu rahatsızlığın farklı türleri veya alt kategorileri nelerdir?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="icon blue">💊</span>
+                        Tedavi Yöntemleri
+                    </label>
+                    <textarea class="form-input" id="inputTreatment" placeholder="Bu rahatsızlık nasıl tedavi edilir? Terapi yöntemleri, ilaçlar vb."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="icon pink">📖</span>
+                        Örnek Hikaye
+                    </label>
+                    <textarea class="form-input" id="inputStory" placeholder="Bu rahatsızlığı daha iyi anlamak için bir vaka hikayesi veya örnek senaryo yazın."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="icon" style="background: rgba(168, 85, 247, 0.15);">📝</span>
+                        Sınav Soruları (10 Soru)
+                    </label>
+                    <div class="exam-questions-form" id="examQuestionsForm">
+                        <!-- Exam questions will be rendered here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCreateModal()">İptal</button>
+                <button class="btn btn-primary" onclick="saveSection()">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Modal -->
+    <div class="modal-overlay" id="viewModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="viewTitle">Bölüm Detayı</h2>
+                <button class="btn-close" onclick="closeViewModal()">✕</button>
+            </div>
+            <div class="view-content" id="viewContent">
+                <!-- Content will be rendered here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeViewModal()">Kapat</button>
+                <button class="btn btn-primary" onclick="editCurrentSection()">Düzenle</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay detail-modal" id="detailModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="detailTitle">Detay</h2>
+                <button class="btn-close" onclick="closeDetailModal()">✕</button>
+            </div>
+            <div class="detail-content" id="detailContent">
+                <!-- Detail content will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal-overlay" id="previewModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="previewTitle">Önizleme</h2>
+                <button class="btn-close" onclick="closePreviewModal()">✕</button>
+            </div>
+            <div class="preview-grid" id="previewGrid">
+                <!-- Preview boxes will be rendered here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePreviewModal()">Kapat</button>
+                <button class="btn btn-primary" onclick="editPreviewSection()">✏️ Düzenle</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Management
+        let sections = JSON.parse(localStorage.getItem('psychologySections')) || [];
+        let editingId = null;
+        let viewingId = null;
+        let previewingId = null;
+        let currentDetailSection = null;
+        let currentDetailField = null;
+
+        const fieldConfig = {
+            name: { icon: '🏷️', label: 'Rahatsızlık Adı', color: 'name' },
+            description: { icon: '❓', label: 'Rahatsızlık Ne?', color: 'description' },
+            diagnosis: { icon: '🔬', label: 'Tanı Kriterleri', color: 'diagnosis' },
+            types: { icon: '📊', label: 'Çeşitleri / Alt Türleri', color: 'types' },
+            treatment: { icon: '💊', label: 'Tedavi Yöntemleri', color: 'treatment' },
+            story: { icon: '📖', label: 'Örnek Hikaye', color: 'story' },
+            exam: { icon: '📝', label: 'Sınav (10 Soru)', color: 'exam' }
+        };
+
+        const fieldOrder = ['name', 'description', 'diagnosis', 'types', 'treatment', 'story', 'exam'];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTheme();
+            renderSections();
+            updateStats();
+
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                renderSections(e.target.value);
+            });
+        });
+
+        // Theme Management
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('psychologyTheme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeUI(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('psychologyTheme', newTheme);
+            updateThemeUI(newTheme);
+        }
+
+        function updateThemeUI(theme) {
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (theme === 'dark') {
+                icon.textContent = '🌙';
+                text.textContent = 'Gece Modu';
+            } else {
+                icon.textContent = '☀️';
+                text.textContent = 'Gündüz Modu';
+            }
+        }
+
+        // Toast Notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastIcon.textContent = type === 'success' ? '✅' : '❌';
+            toastMessage.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Backup Functions
+        function exportBackup() {
+            if (sections.length === 0) {
+                showToast('Yedeklenecek veri yok!', 'error');
+                return;
+            }
+
+            const backup = {
+                version: '1.0',
+                exportDate: new Date().toISOString(),
+                theme: localStorage.getItem('psychologyTheme') || 'dark',
+                sections: sections
+            };
+
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const date = new Date().toLocaleDateString('tr-TR').replace(/\./g, '-');
+            a.download = `psikoloji-yedek-${date}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`${sections.length} bölüm başarıyla yedeklendi!`, 'success');
+        }
+
+        function importBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const backup = JSON.parse(e.target.result);
+                    
+                    if (!backup.sections || !Array.isArray(backup.sections)) {
+                        throw new Error('Geçersiz yedek dosyası');
+                    }
+
+                    const confirmMsg = sections.length > 0 
+                        ? `Mevcut ${sections.length} bölüm silinecek ve ${backup.sections.length} bölüm yüklenecek. Devam etmek istiyor musunuz?`
+                        : `${backup.sections.length} bölüm yüklenecek. Devam etmek istiyor musunuz?`;
+
+                    if (confirm(confirmMsg)) {
+                        sections = backup.sections;
+                        localStorage.setItem('psychologySections', JSON.stringify(sections));
+                        
+                        if (backup.theme) {
+                            document.documentElement.setAttribute('data-theme', backup.theme);
+                            localStorage.setItem('psychologyTheme', backup.theme);
+                            updateThemeUI(backup.theme);
+                        }
+
+                        renderSections();
+                        updateStats();
+                        showToast(`${sections.length} bölüm başarıyla yüklendi!`, 'success');
+                    }
+                } catch (error) {
+                    showToast('Yedek dosyası okunamadı!', 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // Render Sections - Only show name, click to preview
+        function renderSections(searchQuery = '') {
+            const grid = document.getElementById('sectionsGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            let filteredSections = sections;
+            if (searchQuery) {
+                const query = searchQuery.toLowerCase();
+                filteredSections = sections.filter(s => 
+                    s.name.toLowerCase().includes(query) ||
+                    s.diagnosis.toLowerCase().includes(query) ||
+                    s.types.toLowerCase().includes(query) ||
+                    s.treatment.toLowerCase().includes(query)
+                );
+            }
+
+            if (filteredSections.length === 0) {
+                grid.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                grid.style.display = 'grid';
+                emptyState.style.display = 'none';
+                
+                grid.innerHTML = filteredSections.map(section => {
+                    const examCount = section.exam ? section.exam.filter(q => q.question).length : 0;
+                    const filledFields = [
+                        section.description,
+                        section.diagnosis,
+                        section.types,
+                        section.treatment,
+                        section.story,
+                        examCount > 0
+                    ].filter(Boolean).length;
+
+                    return `
+                    <div class="section-card" onclick="openPreviewModal('${section.id}')">
+                        <div class="section-actions">
+                            <button class="action-btn" onclick="event.stopPropagation(); editSection('${section.id}')" title="Düzenle">✏️</button>
+                            <button class="action-btn delete" onclick="event.stopPropagation(); deleteSection('${section.id}')" title="Sil">🗑️</button>
+                        </div>
+                        <div class="section-card-content">
+                            <div class="section-icon-large">🧠</div>
+                            <div class="section-info">
+                                <h3 class="section-title">${escapeHtml(section.name)}</h3>
+                                <div class="section-meta">
+                                    <span>📅 ${formatDate(section.createdAt)}</span>
+                                    <span>📝 ${examCount}/10 soru</span>
+                                </div>
+                                <div class="progress-indicator" title="${filledFields}/6 alan dolu">
+                                    <div class="progress-dot ${section.description ? 'filled description' : ''}" title="Tanım"></div>
+                                    <div class="progress-dot ${section.diagnosis ? 'filled diagnosis' : ''}" title="Tanı"></div>
+                                    <div class="progress-dot ${section.types ? 'filled types' : ''}" title="Çeşitleri"></div>
+                                    <div class="progress-dot ${section.treatment ? 'filled treatment' : ''}" title="Tedavi"></div>
+                                    <div class="progress-dot ${section.story ? 'filled story' : ''}" title="Hikaye"></div>
+                                    <div class="progress-dot ${examCount > 0 ? 'filled exam' : ''}" title="Sınav"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `}).join('');
+            }
+        }
+
+        // Preview Modal
+        function openPreviewModal(sectionId) {
+            const section = sections.find(s => s.id === sectionId);
+            if (!section) return;
+
+            previewingId = sectionId;
+            document.getElementById('previewTitle').textContent = section.name;
+
+            const examCount = section.exam ? section.exam.filter(q => q.question).length : 0;
+
+            document.getElementById('previewGrid').innerHTML = `
+                <div class="preview-box name ${!section.name ? 'empty' : ''}" onclick="openDetailFromPreview('name')">
+                    <div class="preview-box-header">
+                        <div class="preview-box-icon">🏷️</div>
+                        <div class="preview-box-title">Rahatsızlık Adı</div>
+                    </div>
+                    <div class="preview-box-content">${escapeHtml(section.name) || 'Henüz eklenmedi'}</div>
+                </div>
+                <div class="preview-box description ${!section.description ? 'empty' : ''}" onclick="openDetailFromPreview('description')">
+                    <div class="preview-box-header">
+                        <div class="preview-box-icon">❓</div>
+                        <div class="preview-box-title">Rahatsızlık Ne?</div>
+                    </div>
+                    <div class="preview-box-content">${escapeHtml(section.description) || 'Henüz eklenmedi'}</div>
+                </div>
+                <div class="preview-box diagnosis ${!section.diagnosis ? 'empty' : ''}" onclick="openDetailFromPreview('diagnosis')">
+                    <div class="preview-box-header">
+                        <div class="preview-box-icon">🔬</div>
+                        <div class="preview-box-title">Tanı Kriterleri</div>
+                    </div>
+                    <div class="preview-box-content">${escapeHtml(section.diagnosis) || 'Henüz eklenmedi'}</div>
+                </div>
+                <div class="preview-box types ${!section.types ? 'empty' : ''}" onclick="openDetailFromPreview('types')">
+                    <div class="preview-box-header">
+                        <div class="preview-box-icon">📊</div>
+                        <div class="preview-box-title">Çeşitleri</div>
+                    </div>
+                    <div class="preview-box-content">${escapeHtml(section.types) || 'Henüz eklenmedi'}</div>
+                </div>
+                <div class="preview-box treatment ${!section.treatment ? 'empty' : ''}" onclick="openDetailFromPreview('treatment')">
+                    <div class="preview-box-header">
+                        <div class="preview-box-icon">💊</div>
+                        <div class="preview-box-title">Tedavi</div>
+                    </div>
+                    <div class="preview-box-content">${escapeHtml(section.treatment) || 'Henüz eklenmedi'}</div>
+                </div>
+                <div class="preview-box story ${!section.story ? 'empty' : ''}" onclick="openDetailFromPreview('story')">
+                    <div class="preview-box-header">
+                        <div class="preview-box-icon">📖</div>
+                        <div class="preview-box-title">Hikaye</div>
+                    </div>
+                    <div class="preview-box-content">${escapeHtml(section.story) || 'Henüz eklenmedi'}</div>
+                </div>
+                <div class="preview-box exam ${examCount === 0 ? 'empty' : ''}" onclick="openDetailFromPreview('exam')">
+                    <div class="preview-box-header">
+                        <div class="preview-box-icon">📝</div>
+                        <div class="preview-box-title">Sınav</div>
+                    </div>
+                    <div class="preview-box-content">
+                        ${examCount > 0 ? `<span class="exam-count">${examCount}/10 soru hazır</span>` : 'Henüz soru eklenmedi'}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('previewModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePreviewModal() {
+            document.getElementById('previewModal').classList.remove('active');
+            document.body.style.overflow = '';
+            previewingId = null;
+        }
+
+        function editPreviewSection() {
+            const id = previewingId;
+            closePreviewModal();
+            editSection(id);
+        }
+
+        function openDetailFromPreview(field) {
+            const section = sections.find(s => s.id === previewingId);
+            if (!section) return;
+            
+            currentDetailSection = section;
+            currentDetailField = field;
+            
+            closePreviewModal();
+            renderDetailContent();
+            document.getElementById('detailModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Detail Modal
+        function openDetailModal(sectionId, field) {
+            const section = sections.find(s => s.id === sectionId);
+            if (!section) return;
+
+            currentDetailSection = section;
+            currentDetailField = field;
+
+            renderDetailContent();
+            document.getElementById('detailModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function renderDetailContent() {
+            const section = currentDetailSection;
+            const field = currentDetailField;
+            const config = fieldConfig[field];
+
+            document.getElementById('detailTitle').textContent = section.name;
+
+            const currentIndex = fieldOrder.indexOf(field);
+            const prevField = currentIndex > 0 ? fieldOrder[currentIndex - 1] : null;
+            const nextField = currentIndex < fieldOrder.length - 1 ? fieldOrder[currentIndex + 1] : null;
+
+            let bodyContent = '';
+            
+            if (field === 'exam') {
+                const exam = section.exam || [];
+                const hasQuestions = exam.some(q => q.question);
+                
+                if (hasQuestions) {
+                    bodyContent = `<div class="exam-container">
+                        ${exam.map((q, i) => q.question ? `
+                            <div class="exam-question">
+                                <div class="exam-question-header">
+                                    <div class="exam-question-number">${i + 1}</div>
+                                    <div class="exam-question-label">Soru</div>
+                                </div>
+                                <div class="exam-question-text">${escapeHtml(q.question)}</div>
+                                ${q.answer ? `<div class="exam-answer">${escapeHtml(q.answer)}</div>` : ''}
+                            </div>
+                        ` : '').join('')}
+                    </div>`;
+                } else {
+                    bodyContent = `<div class="exam-empty">
+                        <div class="exam-empty-icon">📝</div>
+                        <p>Henüz sınav sorusu eklenmemiş.</p>
+                        <p style="font-size: 0.85rem; margin-top: 5px;">Düzenle butonuna tıklayarak soru ekleyebilirsiniz.</p>
+                    </div>`;
+                }
+            } else {
+                const content = section[field];
+                bodyContent = content 
+                    ? `<div class="detail-body">${escapeHtml(content)}</div>`
+                    : `<div class="detail-body empty">Bu alan henüz doldurulmamış. Düzenle butonuna tıklayarak içerik ekleyebilirsiniz.</div>`;
+            }
+
+            document.getElementById('detailContent').innerHTML = `
+                <div class="detail-header">
+                    <div class="detail-icon ${config.color}">${config.icon}</div>
+                    <div>
+                        <h3>${config.label}</h3>
+                        <p>${section.name}</p>
+                    </div>
+                </div>
+                ${bodyContent}
+                <div class="detail-nav">
+                    <button onclick="navigateDetail('prev')" ${!prevField ? 'disabled' : ''}>
+                        ← ${prevField ? fieldConfig[prevField].label : 'Önceki'}
+                    </button>
+                    <button onclick="editFromDetail()">
+                        ✏️ Düzenle
+                    </button>
+                    <button onclick="navigateDetail('next')" ${!nextField ? 'disabled' : ''}>
+                        ${nextField ? fieldConfig[nextField].label : 'Sonraki'} →
+                    </button>
+                </div>
+            `;
+        }
+
+        function editFromDetail() {
+            const id = currentDetailSection.id;
+            closeDetailModal();
+            editSection(id);
+        }
+
+        function navigateDetail(direction) {
+            const currentIndex = fieldOrder.indexOf(currentDetailField);
+            if (direction === 'prev' && currentIndex > 0) {
+                currentDetailField = fieldOrder[currentIndex - 1];
+            } else if (direction === 'next' && currentIndex < fieldOrder.length - 1) {
+                currentDetailField = fieldOrder[currentIndex + 1];
+            }
+            renderDetailContent();
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('active');
+            document.body.style.overflow = '';
+            currentDetailSection = null;
+            currentDetailField = null;
+        }
+
+        // Update Stats
+        function updateStats() {
+            document.getElementById('totalSections').textContent = sections.length;
+            
+            const completed = sections.filter(s => 
+                s.name && s.description && s.diagnosis && s.types && s.treatment && s.story && 
+                s.exam && s.exam.filter(q => q.question).length >= 5
+            ).length;
+            document.getElementById('completedSections').textContent = completed;
+            document.getElementById('inProgressSections').textContent = sections.length - completed;
+        }
+
+        // Modal Functions
+        function openCreateModal() {
+            editingId = null;
+            document.getElementById('modalTitle').textContent = 'Yeni Bölüm Oluştur';
+            clearForm();
+            renderExamForm([]);
+            document.getElementById('createModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCreateModal() {
+            document.getElementById('createModal').classList.remove('active');
+            document.body.style.overflow = '';
+            clearForm();
+            editingId = null;
+        }
+
+        function clearForm() {
+            document.getElementById('inputName').value = '';
+            document.getElementById('inputDescription').value = '';
+            document.getElementById('inputDiagnosis').value = '';
+            document.getElementById('inputTypes').value = '';
+            document.getElementById('inputTreatment').value = '';
+            document.getElementById('inputStory').value = '';
+        }
+
+        function renderExamForm(examData) {
+            const container = document.getElementById('examQuestionsForm');
+            let html = '';
+            
+            for (let i = 0; i < 10; i++) {
+                const q = examData[i] || { question: '', answer: '' };
+                html += `
+                    <div class="exam-question-item">
+                        <div class="exam-question-item-header">
+                            <div class="exam-question-item-number">${i + 1}</div>
+                            <label>Soru ${i + 1}</label>
+                        </div>
+                        <input type="text" id="examQ${i}" placeholder="Soru yazın..." value="${escapeHtml(q.question)}">
+                        <textarea id="examA${i}" placeholder="Cevap yazın...">${escapeHtml(q.answer)}</textarea>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function getExamData() {
+            const exam = [];
+            for (let i = 0; i < 10; i++) {
+                exam.push({
+                    question: document.getElementById(`examQ${i}`).value.trim(),
+                    answer: document.getElementById(`examA${i}`).value.trim()
+                });
+            }
+            return exam;
+        }
+
+        // Edit Section
+        function editSection(id) {
+            const section = sections.find(s => s.id === id);
+            if (!section) return;
+
+            editingId = id;
+            document.getElementById('modalTitle').textContent = 'Bölümü Düzenle';
+            document.getElementById('inputName').value = section.name;
+            document.getElementById('inputDescription').value = section.description || '';
+            document.getElementById('inputDiagnosis').value = section.diagnosis;
+            document.getElementById('inputTypes').value = section.types;
+            document.getElementById('inputTreatment').value = section.treatment;
+            document.getElementById('inputStory').value = section.story;
+            
+            renderExamForm(section.exam || []);
+
+            document.getElementById('createModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Save Section
+        function saveSection() {
+            const name = document.getElementById('inputName').value.trim();
+            const description = document.getElementById('inputDescription').value.trim();
+            const diagnosis = document.getElementById('inputDiagnosis').value.trim();
+            const types = document.getElementById('inputTypes').value.trim();
+            const treatment = document.getElementById('inputTreatment').value.trim();
+            const story = document.getElementById('inputStory').value.trim();
+            const exam = getExamData();
+
+            if (!name) {
+                showToast('Lütfen rahatsızlık adını girin.', 'error');
+                return;
+            }
+
+            if (editingId) {
+                const index = sections.findIndex(s => s.id === editingId);
+                if (index !== -1) {
+                    sections[index] = {
+                        ...sections[index],
+                        name,
+                        description,
+                        diagnosis,
+                        types,
+                        treatment,
+                        story,
+                        exam,
+                        updatedAt: new Date().toISOString()
+                    };
+                    showToast('Bölüm başarıyla güncellendi!', 'success');
+                }
+            } else {
+                sections.unshift({
+                    id: generateId(),
+                    name,
+                    description,
+                    diagnosis,
+                    types,
+                    treatment,
+                    story,
+                    exam,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+                showToast('Yeni bölüm oluşturuldu!', 'success');
+            }
+
+            localStorage.setItem('psychologySections', JSON.stringify(sections));
+            closeCreateModal();
+            renderSections();
+            updateStats();
+        }
+
+        // Delete Section
+        function deleteSection(id) {
+            const section = sections.find(s => s.id === id);
+            if (confirm(`"${section.name}" bölümünü silmek istediğinizden emin misiniz?`)) {
+                sections = sections.filter(s => s.id !== id);
+                localStorage.setItem('psychologySections', JSON.stringify(sections));
+                renderSections();
+                updateStats();
+                showToast('Bölüm silindi.', 'success');
+            }
+        }
+
+        // Utilities
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('tr-TR', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Close modal on outside click
+        document.getElementById('createModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('createModal')) {
+                closeCreateModal();
+            }
+        });
+
+        document.getElementById('previewModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('previewModal')) {
+                closePreviewModal();
+            }
+        });
+
+        document.getElementById('detailModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('detailModal')) {
+                closeDetailModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeCreateModal();
+                closePreviewModal();
+                closeDetailModal();
+            }
+            if (document.getElementById('detailModal').classList.contains('active')) {
+                if (e.key === 'ArrowLeft') {
+                    navigateDetail('prev');
+                } else if (e.key === 'ArrowRight') {
+                    navigateDetail('next');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
